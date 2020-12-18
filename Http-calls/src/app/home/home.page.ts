@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-
+import { CurrencyApiService } from '../../service/currency-api.service';
+import { Currency } from '../../dtos/ICurrency'
+ 
 
 @Component({
   selector: 'app-home',
@@ -10,15 +11,21 @@ import { HttpClient } from '@angular/common/http';
 })
 export class HomePage implements OnInit {
   
-  moedas: any;  
+  public currencies: Currency[] = [];
+  public newCurrency: Currency[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private http: HttpClient) { }
+  constructor(private currencyApi: CurrencyApiService) { }
 
   ngOnInit() {
-   const usd = this.activatedRoute.snapshot.paramMap.get('USD-BRL,CAD-BRL');
-   this.http.get(`https://economia.awesomeapi.com.br/all${usd}`).subscribe(res => {
-    this.moedas = res;
-   });
-  } 
+    this.callLoadCurrencies();
+    this.defaultValues();
+  }
 
+  async callLoadCurrencies() {
+    await this.currencyApi.loadCurrencies()
+      .then(response =>  {
+        this.currencies = Object.keys(response)
+          .map(e => response[e]);
+      });
+  }
 } 

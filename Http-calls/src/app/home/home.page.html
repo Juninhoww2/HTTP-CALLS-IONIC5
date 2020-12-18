@@ -1,13 +1,10 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title> {{ moedas?.name }}</ion-title>
-  </ion-toolbar>
-</ion-header>
-
-<ion-content padding>
-  <ion-card *ngIf="moedas">
-    <ion-card-content>
-      {{ moedas.usd-brl }}
-    </ion-card-content>
-  </ion-card>
+<ion-content class="general-content" [scrollEvents]="true">
+  <ion-split-pane contentId="main-content">
+  <div class="currencies">
+    <ion-list *ngFor="let currency of currencies">
+      <ion-item>{{ currency.name }}</ion-item>
+      <ion-item>{{ currency.bid }}</ion-item>
+    </ion-list>
+  </div>
+</ion-split-pane>
 </ion-content>
